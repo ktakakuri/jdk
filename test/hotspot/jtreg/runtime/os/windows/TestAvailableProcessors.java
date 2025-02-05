@@ -70,6 +70,7 @@ public class TestAvailableProcessors {
 
         var processBuilder = new ProcessBuilder(command);
         OutputAnalyzer outputAnalyzer = new OutputAnalyzer(processBuilder.start());
+        System.out.println(outputAnalyzer.getOutput());
         outputAnalyzer.shouldHaveExitValue(0);
         outputAnalyzer.shouldContain(osVersionMessage);
         List<String> lines = outputAnalyzer.stdoutAsLines();
