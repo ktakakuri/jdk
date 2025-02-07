@@ -60,20 +60,48 @@ public class TestAvailableProcessors {
     private static final String unsupportedPlatformMessage = "The UseAllWindowsProcessorGroups flag is not supported on this Windows version and will be ignored.";
 
     private static String getWindowsVersion() throws IOException {
+        System.out.println("------ getWindowsVersion start ------");
+
         String systeminfoPath = "systeminfo.exe";
 
         List<String> command = new ArrayList<>();
-        //Execution command to prevent garbled characters
-        command.addAll(List.of("cmd.exe", "/c", "chcp 437", ">nul", "2>&1", "&&"));
-        //Execute command to obtain OS Version
-        command.add(systeminfoPath);
+        command.addAll(List.of("cmd.exe", "/c", "chcp", "437", "2>&1"));
 
         var processBuilder = new ProcessBuilder(command);
+
+        System.out.println("------ chcp start ------");
         OutputAnalyzer outputAnalyzer = new OutputAnalyzer(processBuilder.start());
         System.out.println(outputAnalyzer.getOutput());
-        outputAnalyzer.shouldHaveExitValue(0);
-        outputAnalyzer.shouldContain(osVersionMessage);
-        List<String> lines = outputAnalyzer.stdoutAsLines();
+        System.out.println("------ chcp end ------");
+
+
+        List<String> command2 = new ArrayList<>();
+        command2.add(systeminfoPath);
+
+        var processBuilder2 = new ProcessBuilder(command2);
+
+        System.out.println("------ systeminfo only start ------");
+        OutputAnalyzer outputAnalyzer2 = new OutputAnalyzer(processBuilder2.start());
+        System.out.println(outputAnalyzer2.getOutput());
+        System.out.println("------ systeminfo only end ------");
+
+
+        List<String> command3 = new ArrayList<>();
+        //Execution command to prevent garbled characters
+        command3.addAll(List.of("cmd.exe", "/c", "chcp", "437", ">null", "2>&1", "&&"));
+        //Execute command to obtain OS Version
+        command3.add(systeminfoPath);
+
+        var processBuilder3 = new ProcessBuilder(command2);
+
+        System.out.println("------ all start ------");
+        OutputAnalyzer outputAnalyzer3 = new OutputAnalyzer(processBuilder3.start());
+        System.out.println(outputAnalyzer3.getOutput());
+        System.out.println("------ all end ------");
+
+        outputAnalyzer3.shouldHaveExitValue(0);
+        outputAnalyzer3.shouldContain(osVersionMessage);
+        List<String> lines = outputAnalyzer3.stdoutAsLines();
 
         String osVersion = null;
         for (var line: lines) {
