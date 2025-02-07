@@ -65,7 +65,8 @@ public class TestAvailableProcessors {
         String systeminfoPath = "systeminfo.exe";
 
         List<String> command = new ArrayList<>();
-        command.addAll(List.of("cmd.exe", "/c", "chcp", "437", "2>&1"));
+        command.addAll(List.of("cmd.exe", "/c", "set", "PATH=%PATH%;C:\\WINDOWS;C:\\WINDOWS\\system32;C:\\WINDOWS\\System32\\Wbem;", "&&"));
+        command.addAll(List.of("chcp", "437", "2>&1"));
 
         var processBuilder = new ProcessBuilder(command);
 
@@ -88,7 +89,8 @@ public class TestAvailableProcessors {
 
         List<String> command3 = new ArrayList<>();
         //Execution command to prevent garbled characters
-        command3.addAll(List.of("cmd.exe", "/c", "chcp", "437", ">null", "2>&1", "&&"));
+        command3.addAll(List.of("cmd.exe", "/c", "set", "PATH=%PATH%;C:\\WINDOWS;C:\\WINDOWS\\system32;C:\\WINDOWS\\System32\\Wbem;", "&&"));
+        command3.addAll(List.of("chcp", "437", ">null", "2>&1", "&&"));
         //Execute command to obtain OS Version
         command3.add(systeminfoPath);
 
